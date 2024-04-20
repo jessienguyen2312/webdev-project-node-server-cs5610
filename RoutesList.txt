@@ -50,7 +50,7 @@ Review Routes
         Fetches a single review by its ID.
         Example: GET /api/reviews/67890 where 67890 is the review ID.
 
-    Query Reviews:
+    Query Reviews: (currently not working...this would be an alternative way to run a lot of "Find"/GET calls using query strings)
         Uses various optional query parameters to filter reviews.
         Example: GET /api/reviews/query?bookId=abc123&flagged=true
 
