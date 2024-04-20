@@ -5,6 +5,7 @@ import cors from "cors";
 import "dotenv/config";
 
 import UserRoutes from "./Users/routes.js";
+import ReviewRoutes from './Reviews/routes.js';
 
 const app = express();
 
@@ -38,7 +39,9 @@ mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"}).then(() => {
 app.get('/', (req, res) => {
     res.send('Welcome to Full Stack Development!')
 });
+
 UserRoutes(app);
+ReviewRoutes(app);
 
 // Start listening on a specific port
 const PORT = process.env.PORT || 4000;
