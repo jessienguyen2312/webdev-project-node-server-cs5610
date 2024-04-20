@@ -1,0 +1,67 @@
+[
+    {
+        "username": "booklover123",
+        "password": "pass123",
+        "firstName": "Alice",
+        "lastName": "Johnson",
+        "email": "alicej@example.com",
+        "role": "READER",
+        "aboutMe": "Avid reader and coffee enthusiast. Love discussing classic literature and modern novels.",
+        "profilePicture": "",
+        "follower": ["pageTurner", "novelFan"],
+        "following": ["novelFan", "mysteryReader"],
+        "favoriteBook": ["OL7353617M", "OL22449759M, OL1743891M, OL7826547M, OL998887M"]
+    },
+    {
+        "username": "pageTurner",
+        "password": "pass123",
+        "firstName": "Bob",
+        "lastName": "Smith",
+        "email": "bobsmith@example.com",
+        "role": "READER",
+        "aboutMe": "Tech geek and fantasy lover. Always looking for the next epic saga.",
+        "profilePicture": "",
+        "follower": ["booklover123", "mysteryReader"],
+        "following": ["booklover123", "epicReader"],
+        "favoriteBook": ["OL7353617M", "OL1743891M"]
+    },
+    {
+        "username": "novelFan",
+        "password": "pass123",
+        "firstName": "Clara",
+        "lastName": "Evans",
+        "email": "clarae@example.com",
+        "role": "READER",
+        "aboutMe": "Mystery and thriller aficionado. Can't resist a good plot twist.",
+        "profilePicture": "",
+        "follower": ["epicReader", "mysteryReader"],
+        "following": ["booklover123", "pageTurner"],
+        "favoriteBook": ["OL7826547M"]
+    },
+    {
+        "username": "mysteryReader",
+        "password": "pass123",
+        "firstName": "Daniel",
+        "lastName": "Lee",
+        "email": "daniell@example.com",
+        "role": "READER",
+        "aboutMe": "Enthusiastic about crime novels and psychological thrillers. Love unraveling the mysteries.",
+        "profilePicture": "",
+        "follower": ["booklover123", "epicReader"],
+        "following": ["novelFan", "pageTurner"],
+        "favoriteBook": ["OL22449759M", "OL1743891M"]
+    },
+    {
+        "username": "epicReader",
+        "password": "pass123",
+        "firstName": "Emily",
+        "lastName": "White",
+        "email": "emilyw@example.com",
+        "role": "READER",
+        "aboutMe": "All about grand stories and historical epics. The bigger the book, the better.",
+        "profilePicture": "",
+        "follower": ["novelFan", "mysteryReader"],
+        "following": ["booklover123", "mysteryReader"],
+        "favoriteBook": ["OL7826547M", "OL1743891M"]
+    }
+]
