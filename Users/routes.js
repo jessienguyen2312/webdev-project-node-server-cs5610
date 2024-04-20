@@ -29,6 +29,17 @@ export default function UserRoutes(app) {
     };
     app.get('/api/users/:id', findUserById);
 
+    const findUserByUsername = async (req, res) => {
+        const { username } = req.params;
+        const user = await userDAO.findUserByUsername(username);
+        if (user) {
+            res.json(user);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    };
+    app.get('/api/users/:username', findUserByUsername);
+
     // UPDATE
     const updateUser = async (req, res) => {
         const { id } = req.params;
