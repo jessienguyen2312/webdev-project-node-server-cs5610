@@ -1,5 +1,14 @@
 # README
-for some notes/tips
+for some notes/tips. Priority notes / TODOs logged up top:
+
+## Edit Log:
+* need to test the edit/add/delete functionality for reviews and users
+* tried adding a big query-builder API for reviews -- need to debug if we want to use it. I think it could help robustly handle review filtering on the backend. 
+
+## TODOS:
+* test edit/add/delete functionality for reviews and users
+* the read functions should work but double-check
+* Book Module -- I think we might want to have our own Books collection to store data about books. For example -- most reviewed/popular book? gonna sleep on it
 
 ## Making Modules / Entities
 When making new Modules/Entities (Reviews, Users, etc.), the logical order to build out the files is: 
