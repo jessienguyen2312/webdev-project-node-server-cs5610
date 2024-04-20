@@ -25,20 +25,31 @@ export default function UserRoutes(app) {
     const findUserById = async (req, res) => {
         const { id } = req.params;
         const user = await userDAO.findUserById(id);
+        if (!user) {
+            res.status(404).json({ message: 'User not found' });
+            return;
+        }
         res.json(user);
     };
     app.get('/api/users/:id', findUserById);
 
+    /* We might one day want to switch to query strings instead --- may allow for searching by other fields */
     const findUserByUsername = async (req, res) => {
         const { username } = req.params;
-        const user = await userDAO.findUserByUsername(username);
-        if (user) {
-            res.json(user);
-        } else {
-            res.status(404).json({ message: 'User not found' });
+
+        try {
+            const user = await userDAO.findUserByUsername(username);
+            if (user) {
+                res.json(user);
+            } else {
+                res.status(404).json({ message: 'User not found' });
+            }
+        } catch (error) {
+            console.error('Error fetching user:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
         }
     };
-    app.get('/api/users/:username', findUserByUsername);
+    app.get('/api/users/find/:username', findUserByUsername);
 
     // UPDATE
     const updateUser = async (req, res) => {

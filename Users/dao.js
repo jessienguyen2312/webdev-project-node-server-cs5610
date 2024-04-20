@@ -14,7 +14,9 @@ export const createUser = async (user) => {
 // FIND/READ USERS
 export const findAllUsers = () => userModel.find();
 export const findUserById = (id) => userModel.findById(id);
-export const findUserByUsername = (username) => userModel.findOne({ username });
+
+export const findUserByUsername = (username) => userModel.findOne({ username: username });
+
 export const findUsersByRole = (role) => userModel.find({ role: role });
 export const findUserByCredentials = (username, password) => userModel.findOne({ username, password });
 
