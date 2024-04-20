@@ -20,7 +20,8 @@ const userSchema = new mongoose.Schema({
     following: [String],
     favoriteBook: [String], 
     OL_author_key: String
-});
+    }, 
+    { collection: "users" });
 
 // Pre-save hook to set profile picture URL based on the role -- not sure if this'll work
 userSchema.pre('save', function (next) {

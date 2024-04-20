@@ -1,6 +1,6 @@
-import * as userDAO from './userDAO';
+import * as userDAO from './dao.js';
 
-export default function userRoutes(app) {
+export default function UserRoutes(app) {
     // CREATE
     const createUser = async (req, res) => {
         const user = await userDAO.createUser(req.body);

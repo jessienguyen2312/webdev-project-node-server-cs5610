@@ -4,21 +4,44 @@ import session from "express-session";
 import cors from "cors";
 import "dotenv/config";
 
-import userRoutes from "./Users/userRoutes";
-
-
-
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
-mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"});
+import UserRoutes from "./Users/routes.js";
 
 const app = express();
-app.get('/', (req, res) => {res.send('Welcome to Full Stack Development!')})
-app.use(express.json());
+
+// Configure CORS first
 app.use(cors({
     origin: 'http://localhost:3000',
     credentials: true
 }));
 
-userRoutes(app);
+// Enable JSON body parsing for incoming requests
+app.use(express.json());
 
-app.listen(4000);
+// Setup session management
+app.use(session({
+    secret: 'secret',  
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: 'auto' }
+}));
+
+// Initialize database connection
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
+mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"}).then(() => {
+    console.log('Connected to MongoDB');
+    console.log('Database:', mongoose.connection.name);
+}).catch(error => {
+    console.log('Error connecting to MongoDB:', error.message);
+});
+
+// Setup routes
+app.get('/', (req, res) => {
+    res.send('Welcome to Full Stack Development!')
+});
+UserRoutes(app);
+
+// Start listening on a specific port
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});
