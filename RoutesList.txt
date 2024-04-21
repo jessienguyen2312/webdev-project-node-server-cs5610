@@ -1,0 +1,75 @@
+User Routes
+
+    Create User:
+        Creates a new user from the provided request body.
+        Example: POST /api/users with a JSON body containing user details.
+
+    Find All Users:
+        Retrieves all users or filters users by role.
+        Example: GET /api/users or GET /api/users?role=ADMIN
+
+    Find User by ID:
+        Fetches a single user by their ID.
+        Example: GET /api/users/12345 where 12345 is the user ID.
+
+    Find User by Username:
+        Retrieves a user by their username.
+        Example: GET /api/users/find/johndoe where johndoe is the username.
+
+    Update User:
+        Updates user details for the specified ID.
+        Example: PUT /api/users/12345 with a JSON body containing the updates.
+
+    Delete User:
+        Deletes a user based on the provided ID.
+        Example: DELETE /api/users/12345 where 12345 is the user ID.
+
+    User Sign-In:
+        Authenticates a user and sets up a session.
+        Example: POST /api/users/signin with a JSON body containing username and password.
+
+    User Sign-Out:
+        Destroys the session for the currently logged-in user.
+        Example: POST /api/users/signout
+
+    User Profile:
+        Returns the profile of the currently logged-in user.
+        Example: POST /api/users/profile (consider changing to GET for better RESTful practice)
+
+Review Routes
+
+    Create Review:
+        Creates a new review from the request body.
+        Example: POST /api/reviews with a JSON body containing review details.
+
+    Find All Reviews:
+        Retrieves all reviews stored in the database.
+        Example: GET /api/reviews
+
+    Find Review by ID:
+        Fetches a single review by its ID.
+        Example: GET /api/reviews/67890 where 67890 is the review ID.
+
+    Query Reviews: (currently not working...this would be an alternative way to run a lot of "Find"/GET calls using query strings)
+        Uses various optional query parameters to filter reviews.
+        Example: GET /api/reviews/query?bookId=abc123&flagged=true
+
+    Find Reviews for a Specific Book:
+        Retrieves all reviews associated with a specified book ID.
+        Example: GET /api/reviews/book/abc123 where abc123 is the book ID.
+
+    Find Reviews by User:
+        Fetches all reviews written by a specified user.
+        Example: GET /api/reviews/user/johndoe where johndoe is the username.
+
+    Find Reviews for a Book by Rating:
+        Retrieves all reviews for a specific book filtered by a specified rating.
+        Example: GET /api/reviews/book/abc123/rating/4 where abc123 is the book ID and 4 is the rating.
+
+    Update Review:
+        Updates details of a specific review.
+        Example: PUT /api/reviews/67890 with a JSON body containing the updates where 67890 is the review ID.
+
+    Delete Review:
+        Deletes a review based on its ID.
+        Example: DELETE /api/reviews/67890 where 67890 is the review ID.
