@@ -3,6 +3,7 @@ import reviewModel from "./model.js";
 // CREATE
 export const createReview = async (review) => {
     try {
+        delete review._id
         return await reviewModel.create(review);
     } catch (error) {
         if (error.name === 'ValidationError') {

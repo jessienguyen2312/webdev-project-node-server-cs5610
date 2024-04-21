@@ -66,9 +66,9 @@ export default function ReviewRoutes(app) {
             res.status(500).json({ message: 'Error fetching reviews', error: error.message });
         }
     };
-    
+
     app.get('/api/reviews/book/:bookId', findReviewsForBook);
-    
+
 
     const findReviewsByUser = async (req, res) => {
         try {
@@ -77,13 +77,13 @@ export default function ReviewRoutes(app) {
                 res.status(400).json({ message: 'User not found' });
                 return;
             }
-            const reviews = await reviewDAO.findReviewsByUser( username );
+            const reviews = await reviewDAO.findReviewsByUser(username);
             res.json(reviews);
         }
         catch (error) {
             res.status(500).json({ message: 'Error fetching reviews', error: error.message });
         }
-    };  
+    };
     app.get('/api/reviews/user/:username', findReviewsByUser);
 
     const findReviewsForBookByRating = async (req, res) => {
@@ -93,7 +93,7 @@ export default function ReviewRoutes(app) {
                 res.status(400).json({ message: 'Book not found' });
                 return;
             }
-            const reviews = await reviewDAO.findReviewsForBookByRating( bookId, rating);
+            const reviews = await reviewDAO.findReviewsForBookByRating(bookId, rating);
             res.json(reviews);
         }
         catch (error) {
@@ -137,4 +137,6 @@ export default function ReviewRoutes(app) {
             res.status(500).json({ message: 'Error deleting review', error: error.message });
         }
     }
+    app.delete('/api/reviews/:id', deleteReview);
 }
+
