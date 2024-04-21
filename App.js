@@ -3,31 +3,50 @@ import mongoose from "mongoose";
 import session from "express-session";
 import cors from "cors";
 import "dotenv/config";
-
 import UserRoutes from "./Users/routes.js";
 import ReviewRoutes from './Reviews/routes.js';
 
+// Initialize database connection
+const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
+
 const app = express();
+
 
 // Configure CORS first
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: ['https://main--bookazon.netlify.app', 'http://localhost:3000'],
     credentials: true
 }));
 
 // Enable JSON body parsing for incoming requests
 app.use(express.json());
 
-// Setup session management
-app.use(session({
-    secret: 'secret',  
+const sessionOptions = {
+    secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: true,
-    cookie: { secure: 'auto' }
-}));
+    saveUninitialized: false,
+    proxy: true
+};
+if (process.env.NODE_ENV !== "development") {
+    sessionOptions.proxy = true;
+    sessionOptions.cookie = {
+        sameSite: "none",
+        secure: true,
+        domain: "bookazon-node-server.onrender.com"
+    };
+}
+app.use(session(sessionOptions));
 
-// Initialize database connection
-const CONNECTION_STRING = process.env.DB_CONNECTION_STRING;
+
+// Setup session management
+// app.use(session({
+//     secret: 'secret',
+//     resave: false,
+//     saveUninitialized: true,
+//     cookie: { secure: 'auto' }
+// }));
+
+
 mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"}).then(() => {
     console.log('Connected to MongoDB');
     console.log('Database:', mongoose.connection.name);
