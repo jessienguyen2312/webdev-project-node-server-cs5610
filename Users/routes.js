@@ -74,6 +74,8 @@ export default function UserRoutes(app) {
         const user = await userDAO.findUserByCredentials(username, password);
         if (user) {
             req.session['currentUser'] = user;
+            
+            console.log('Session set:', req.session);
             res.json(user);
         } else {
             res.status(401).json({ message: 'Invalid credentials' });
@@ -97,5 +99,22 @@ export default function UserRoutes(app) {
         }
     };
     app.post("/api/users/profile", profile);  // feel like this should be app.get
+
+
+    const session = (req, res) => {
+        // console.log('Session accessed:', req.session);
+        // Check if currentUser exists in the session
+        const currentUser = req.session['currentUser'];
+        console.log(`profile session: ${req.session['currentUser']}`)
+        if (!currentUser) {
+            // If currentUser is not found, send a 404 status
+            return res.status(404).json({ message: "user not logged in" });
+        }
+
+        // If currentUser exists, send it as a JSON response
+        res.json(currentUser);
+    };
+
+    app.get("/api/session", session);
 
 }
