@@ -21,22 +21,34 @@ app.use(cors({
 // Enable JSON body parsing for incoming requests
 app.use(express.json());
 
+// const sessionOptions = {
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     proxy: true
+// };
+// if (process.env.NODE_ENV !== "development") {
+//     sessionOptions.proxy = true;
+//     sessionOptions.cookie = {
+//         sameSite: "none",
+//         secure: true,
+//         // domain: "bookazon-node-server.onrender.com"
+//     };
+// }
+// app.use(session(sessionOptions));
+
+
+
 const sessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    proxy: true
+    saveUninitialized: true,
+    cookie: {
+        secure: 'auto'
+    }
 };
-if (process.env.NODE_ENV !== "development") {
-    sessionOptions.proxy = true;
-    sessionOptions.cookie = {
-        sameSite: "none",
-        secure: true,
-        // domain: "bookazon-node-server.onrender.com"
-    };
-}
-app.use(session(sessionOptions));
 
+app.use(session(sessionOptions));
 
 
 
