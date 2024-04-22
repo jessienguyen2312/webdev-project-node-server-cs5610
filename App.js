@@ -21,21 +21,36 @@ app.use(cors({
 // Enable JSON body parsing for incoming requests
 app.use(express.json());
 
+// const sessionOptions = {
+//     secret: process.env.SESSION_SECRET,
+//     resave: false,
+//     saveUninitialized: false,
+//     proxy: true
+// };
+// if (process.env.NODE_ENV !== "development") {
+//     sessionOptions.proxy = true;
+//     sessionOptions.cookie = {
+//         sameSite: "none",
+//         secure: true,
+//         // domain: "bookazon-node-server.onrender.com"
+//     };
+// }
+// app.use(session(sessionOptions));
+
+
+
 const sessionOptions = {
     secret: process.env.SESSION_SECRET,
     resave: false,
-    saveUninitialized: false,
-    proxy: true
+    saveUninitialized: true,
+    cookie: {
+        secure: 'auto'
+    }
 };
-if (process.env.NODE_ENV !== "development") {
-    sessionOptions.proxy = true;
-    sessionOptions.cookie = {
-        sameSite: "none",
-        secure: true,
-        domain: "bookazon-node-server.onrender.com"
-    };
-}
+
 app.use(session(sessionOptions));
+
+
 
 
 // Setup session management
@@ -47,7 +62,7 @@ app.use(session(sessionOptions));
 // }));
 
 
-mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"}).then(() => {
+mongoose.connect(CONNECTION_STRING, { dbName: "bookazon" }).then(() => {
     console.log('Connected to MongoDB');
     console.log('Database:', mongoose.connection.name);
 }).catch(error => {
@@ -58,6 +73,8 @@ mongoose.connect(CONNECTION_STRING, {dbName: "bookazon"}).then(() => {
 app.get('/', (req, res) => {
     res.send('Welcome to Full Stack Development!')
 });
+
+
 
 UserRoutes(app);
 ReviewRoutes(app);
