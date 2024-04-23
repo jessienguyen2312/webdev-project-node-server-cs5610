@@ -22,6 +22,12 @@ export default function UserRoutes(app) {
     };
     app.get('/api/users', findAllUsers);
 
+    // find role == author
+    const findAllAuthors = async (req, res) => {
+        const users = await userDAO.findUsersByRole('AUTHOR');
+        res.json(users);
+    };
+
     const findUserById = async (req, res) => {
         const { id } = req.params;
         const user = await userDAO.findUserById(id);
