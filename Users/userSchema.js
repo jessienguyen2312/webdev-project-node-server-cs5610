@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
     follower: [String],
     following: [String],
     favoriteBook: [String], 
-    OL_author_key: String
+    OL_author_key: {type: String, unique: true}
     }, 
     { collection: "users" });
 
