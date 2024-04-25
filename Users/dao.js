@@ -28,8 +28,7 @@ export const updateUser = (id, user) => userModel.updateOne({ _id: id }, { $set:
 // DELETE
 export const deleteUser = (id) => userModel.deleteOne({ _id: id });
 
-// FOLLOW/UNFOLLOW
-
+// FOLLOW
 /* We're passing the logged-in users ID, but the person they're unfollowing's username */
 // need to retrieve the unfollowing's userid to make the update
 export const unfollowUser = async (userId, usernameToUnfollow) => {
@@ -64,7 +63,7 @@ export const unfollowUser = async (userId, usernameToUnfollow) => {
 
         // Fetch the updated user document for the current user
         const updatedUser = await userModel.findById(userId, null, opts);
-        
+
         console.log("DAO LOG: Updated user to return:", updatedUser);
 
         await session.commitTransaction();
@@ -76,4 +75,49 @@ export const unfollowUser = async (userId, usernameToUnfollow) => {
         session.endSession();
     }
 };
+
+// FOLLOW
+export const followUser = async (userId, usernameToFollow) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        const opts = { session, new: true };
+
+        console.log("DAO LOG: Following user:", usernameToFollow, "from user:", userId);
+
+        // Since we are using usernames in the following and followers array
+        // No need to fetch user to follow by username for ID, we directly use the username
+        // Perform the follow update on the current user
+        const followingUpdate = await userModel.updateOne(
+            { _id: userId },
+            { $addToSet: { following: usernameToFollow } },
+            opts
+        );
+
+        // Also update the followers list of the user being followed
+        // Use the username directly to identify the user being followed
+        const followerUpdate = await userModel.updateOne(
+            { username: usernameToFollow },
+            { $addToSet: { follower: (await userModel.findById(userId)).username } },
+            opts
+        );
+
+        // Check that the follow action modified the user
+        if (followingUpdate.modifiedCount === 0 || followerUpdate.modifiedCount === 0) {
+            throw new Error("DAO LOG: Follow operation failed.");
+        }
+        // Fetch the updated user document for the current user
+        const updatedUser = await userModel.findById(userId, null, opts);
+        console.log("DAO LOG: Updated user to return:", updatedUser);
+
+        await session.commitTransaction();
+        return updatedUser;
+    } catch (error) {
+        await session.abortTransaction();
+        throw error;
+    } finally {
+        session.endSession();
+    }
+};
+
 

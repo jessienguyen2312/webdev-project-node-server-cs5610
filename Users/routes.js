@@ -133,7 +133,7 @@ export default function UserRoutes(app) {
 
     app.get("/api/session", session);
 
-    // Follow/Unfollow
+    // Unfollow
     const unfollowUser = async (req, res) => {
         try {
             const { userId } = req.params; // ID of the user performing the unfollow
@@ -152,7 +152,27 @@ export default function UserRoutes(app) {
             res.status(500).send('Internal Server Error');
         }
     };
-    
     app.put('/api/users/:userId/unfollow', unfollowUser);
+
+    // Follow
+    const followUser = async (req, res) => {
+        try {
+            const { userId } = req.params; // ID of the user performing the follow
+            const { usernameToFollow } = req.body; // Username of the user to be followed
+    
+            console.log("ROUTE LOG: Received follow request:", { userId, usernameToFollow }); // Debug log to confirm received data
+    
+            const result = await userDAO.followUser(userId, usernameToFollow);
+            if (result) {
+                res.json({ message: 'Followed successfully', user: result });
+            } else {
+                res.status(404).send('Follow failed');
+            }
+        } catch (error) {
+            console.error('ROUTE LOG: Failed to follow: ', error);
+            res.status(500).send('Internal Server Error');
+        }
+    };
+    app.put('/api/users/:userId/follow', followUser);
     
 }
