@@ -1,6 +1,17 @@
 import * as userDAO from './dao.js';
+import userModel from './userModel.js';
 
 export default function UserRoutes(app) {
+    app.get('/test-user-model', async (req, res) => {
+        try {
+            const users = await userModel.find();
+            res.json(users);
+        } catch (error) {
+            console.error('Test userModel failed:', error);
+            res.status(500).send('Error testing userModel');
+        }
+    });
+    
     // CREATE
     const createUser = async (req, res) => {
         const user = await userDAO.createUser(req.body);
@@ -116,13 +127,32 @@ export default function UserRoutes(app) {
             // If currentUser is not found, send a 404 status
             return res.status(404).json({ message: "user not logged in" });
         }
-
         // If currentUser exists, send it as a JSON response
         res.json(currentUser);
     };
 
     app.get("/api/session", session);
 
-
-
+    // Follow/Unfollow
+    const unfollowUser = async (req, res) => {
+        try {
+            const { userId } = req.params; // ID of the user performing the unfollow
+            const { usernameToUnfollow } = req.body; // Username of the user to be unfollowed
+    
+            console.log("ROUTE LOG: Received unfollow request:", { userId, usernameToUnfollow }); // Debug log to confirm received data
+    
+            const result = await userDAO.unfollowUser(userId, usernameToUnfollow);
+            if (result) {
+                res.json({ message: 'Unfollowed successfully', user: result });
+            } else {
+                res.status(404).send('Unfollow failed');
+            }
+        } catch (error) {
+            console.error('ROUTE LOG: Failed to unfollow: ', error);
+            res.status(500).send('Internal Server Error');
+        }
+    };
+    
+    app.put('/api/users/:userId/unfollow', unfollowUser);
+    
 }
