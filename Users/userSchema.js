@@ -3,7 +3,6 @@ import mongoose from "mongoose";
 const profilePicURL = 'https://api.dicebear.com/8.x/thumbs/svg';
 
 const userSchema = new mongoose.Schema({
-    _id: String,
     username: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     firstName: String,
