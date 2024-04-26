@@ -20,7 +20,7 @@ export default function UserRoutes(app) {
     app.post('/api/users', createUser);
 
 
-    // READ / FIND
+    // READ / FIND/
     const findAllUsers = async (req, res) => {
         const { role } = req.query;
         if (role) {
@@ -124,6 +124,18 @@ export default function UserRoutes(app) {
         res.sendStatus(200);
     };
     app.post('/api/users/signout', signout);
+
+    const signup = async (req, res) => {
+        const user = await userDAO.findUserByUsername(req.body.username);
+        if (user) {
+          res.status(400).json(
+            { message: "Username already taken" });
+        } else {
+        const currentUser = await userDAO.createUser(req.body);
+        req.session["currentUser"] = currentUser;
+        res.json(currentUser);}
+      };
+      app.post("/api/users/signup", signup);
 
     // PROFILE
     const profile = (req, res) => {
