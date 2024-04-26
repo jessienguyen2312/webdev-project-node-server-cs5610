@@ -11,7 +11,7 @@ export default function UserRoutes(app) {
             res.status(500).send('Error testing userModel');
         }
     });
-    
+
     // CREATE
     const createUser = async (req, res) => {
         const user = await userDAO.createUser(req.body);
@@ -75,24 +75,24 @@ export default function UserRoutes(app) {
     //     const currentUser = await userDAO.findUserById(id);
     //     res.json(currentUser);
     // };
-   const updateUser = async (req, res) => {
+    const updateUser = async (req, res) => {
         const { id } = req.params;
-        const  user  = req.body;
+        const user = req.body;
         console.log('Updating user with ID:', id);
- 
- 
+
+
         // Log the data received in request body to verify it's what you expect
         console.log('Data received for update:', user);
- 
+
         const status = await userDAO.updateUser(id, user);
         console.log('Update status:', status);
         req.session['currentUser'] = user;
         console.log('User Updated', req.session);
- 
-        console.log('Updated User:',  req.session['currentUser']);
+
+        console.log('Updated User:', req.session['currentUser']);
         res.json(user);
         // }
- 
+
     };
     app.put('/api/users/:id', updateUser);
 
@@ -110,7 +110,7 @@ export default function UserRoutes(app) {
         const user = await userDAO.findUserByCredentials(username, password);
         if (user) {
             req.session['currentUser'] = user;
-            
+
             console.log('Session set:', req.session);
             res.json(user);
         } else {
@@ -157,9 +157,9 @@ export default function UserRoutes(app) {
         try {
             const { userId } = req.params; // ID of the user performing the unfollow
             const { usernameToUnfollow } = req.body; // Username of the user to be unfollowed
-    
+
             console.log("ROUTE LOG: Received unfollow request:", { userId, usernameToUnfollow }); // Debug log to confirm received data
-    
+
             const result = await userDAO.unfollowUser(userId, usernameToUnfollow);
             if (result) {
                 res.json({ message: 'Unfollowed successfully', user: result });
@@ -178,9 +178,9 @@ export default function UserRoutes(app) {
         try {
             const { userId } = req.params; // ID of the user performing the follow
             const { usernameToFollow } = req.body; // Username of the user to be followed
-    
+
             console.log("ROUTE LOG: Received follow request:", { userId, usernameToFollow }); // Debug log to confirm received data
-    
+
             const result = await userDAO.followUser(userId, usernameToFollow);
             if (result) {
                 res.json({ message: 'Followed successfully', user: result });
@@ -193,5 +193,45 @@ export default function UserRoutes(app) {
         }
     };
     app.put('/api/users/:userId/follow', followUser);
-    
+
+
+
+
+    // Route to add a book to a user's favorites
+    app.put('/api/users/:id/favorite', async (req, res) => {
+        const { id } = req.params;
+        const { bookId } = req.body;  // Assuming the ID of the book to be added is passed in the request body
+
+        try {
+            const updatedUser = await userDAO.addFavoriteBook(id, bookId);
+            if (updatedUser) {
+                req.session['currentUser'] = updatedUser;
+                res.json(updatedUser);
+            } else {
+                res.status(404).json({ message: 'User not found' });
+            }
+        } catch (error) {
+            console.error('Error adding favorite book:', error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    });
+
+
+    app.delete('/api/users/:userId/favorites/:bookId', async (req, res) => {
+        const { userId, bookId } = req.params;
+        console.log(bookId)
+
+        try {
+
+            const updatedUser = await userDAO.removeFavoriteBook(userId, bookId);
+
+            req.session['currentUser'] = updatedUser;
+            res.json({
+              updatedUser
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    });
+
 }

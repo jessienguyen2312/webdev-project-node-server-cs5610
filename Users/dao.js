@@ -122,3 +122,30 @@ export const followUser = async (userId, usernameToFollow) => {
 
     
 
+export const addFavoriteBook = async (userId, bookId) => {
+    try {
+        return await userModel.findByIdAndUpdate(
+            userId,
+            { $addToSet: { favoriteBook: bookId } },  // Prevents duplicate entries
+            { new: true }
+        );
+    } catch (error) {
+        throw new Error(error.message);
+    }
+};
+
+export const removeFavoriteBook = async (userId, bookId) => {
+    try {
+        const updateResult = await userModel.findByIdAndUpdate(
+            userId,
+            { $pull: { favoriteBook: bookId } },  // Removes the bookId from the favoriteBook array
+            { new: true }  // Returns the updated document
+        );
+        if (!updateResult) {
+            throw new Error("User not found.");
+        }
+        return updateResult;
+    } catch (error) {
+        throw new Error(`Error removing favorite book: ${error.message}`);
+    }
+};

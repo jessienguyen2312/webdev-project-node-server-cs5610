@@ -3,8 +3,14 @@ import * as reviewDAO from './dao.js';
 export default function ReviewRoutes(app) {
     // CREATE
     const createReview = async (req, res) => {
+        try{
         const review = await reviewDAO.createReview(req.body);
         res.json(review);
+        }
+        catch (error) {
+            const status = error.name === 'ValidationError' ? 400 : 500;
+            res.status(status).json({ message: 'Error updating review', error: error.message });
+        }
     };
     app.post('/api/reviews', createReview);
 
