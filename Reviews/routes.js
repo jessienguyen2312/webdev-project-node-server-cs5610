@@ -3,9 +3,9 @@ import * as reviewDAO from './dao.js';
 export default function ReviewRoutes(app) {
     // CREATE
     const createReview = async (req, res) => {
-        try{
-        const review = await reviewDAO.createReview(req.body);
-        res.json(review);
+        try {
+            const review = await reviewDAO.createReview(req.body);
+            res.json(review);
         }
         catch (error) {
             const status = error.name === 'ValidationError' ? 400 : 500;
@@ -131,8 +131,10 @@ export default function ReviewRoutes(app) {
 
     // DELETE
     const deleteReview = async (req, res) => {
+        const { id } = req.params;
+        console.log(id)
         try {
-            const { id } = req.params;
+
             const review = await reviewDAO.deleteReview(id);
             if (!review) {
                 res.status(404).json({ message: 'Review not found' });
