@@ -69,11 +69,30 @@ export default function UserRoutes(app) {
     app.get('/api/users/find/:username', findUserByUsername);
 
     // UPDATE
-    const updateUser = async (req, res) => {
+    // const updateUser = async (req, res) => {
+    //     const { id } = req.params;
+    //     const status = await userDAO.updateUser(id, req.body);
+    //     const currentUser = await userDAO.findUserById(id);
+    //     res.json(currentUser);
+    // };
+   const updateUser = async (req, res) => {
         const { id } = req.params;
-        const status = await userDAO.updateUser(id, req.body);
-        const currentUser = await userDAO.findUserById(id);
-        res.json(currentUser);
+        const  user  = req.body;
+        console.log('Updating user with ID:', id);
+ 
+ 
+        // Log the data received in request body to verify it's what you expect
+        console.log('Data received for update:', user);
+ 
+        const status = await userDAO.updateUser(id, user);
+        console.log('Update status:', status);
+        req.session['currentUser'] = user;
+        console.log('User Updated', req.session);
+ 
+        console.log('Updated User:',  req.session['currentUser']);
+        res.json(user);
+        // }
+ 
     };
     app.put('/api/users/:id', updateUser);
 
