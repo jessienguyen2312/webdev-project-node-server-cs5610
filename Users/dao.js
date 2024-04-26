@@ -52,7 +52,7 @@ export const unfollowUser = async (userId, usernameToUnfollow) => {
         // Use the username directly to identify the user being unfollowed
         const followerUpdate = await userModel.updateOne(
             { username: usernameToUnfollow },
-            { $pull: { followers: (await userModel.findById(userId)).username } },
+            { $pull: { follower: (await userModel.findById(userId)).username } },
             opts
         );
 
@@ -90,7 +90,7 @@ export const followUser = async (userId, usernameToFollow) => {
         // Perform the follow update on the current user
         const followingUpdate = await userModel.updateOne(
             { _id: userId },
-            { $addToSet: { following: usernameToFollow } },
+            { $push: { following: usernameToFollow } },
             opts
         );
 
@@ -98,7 +98,7 @@ export const followUser = async (userId, usernameToFollow) => {
         // Use the username directly to identify the user being followed
         const followerUpdate = await userModel.updateOne(
             { username: usernameToFollow },
-            { $addToSet: { follower: (await userModel.findById(userId)).username } },
+            { $push: { follower: (await userModel.findById(userId)).username } },
             opts
         );
 
@@ -120,4 +120,5 @@ export const followUser = async (userId, usernameToFollow) => {
     }
 };
 
+    
 
